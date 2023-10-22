@@ -113,6 +113,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                   initialPage: 'Orders',
                   page: OrdersWidget(),
                 ),
+        ),
+        FFRoute(
+          name: 'TallyPage',
+          path: '/tallyPage',
+          builder: (context, params) => TallyPageWidget(
+            orderID: params.getParam('orderID', ParamType.String),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

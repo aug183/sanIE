@@ -47,6 +47,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       );
     }
 
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -90,7 +92,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: 120.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 3.0,
@@ -160,7 +162,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           .titleMedium
                                           .override(
                                             fontFamily: 'Outfit',
-                                            color: Color(0xFF090F13),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             fontSize: 40.0,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -178,7 +181,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       .bodySmall
                                       .override(
                                         fontFamily: 'Outfit',
-                                        color: Color(0xFF7C8791),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -199,7 +203,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: 120.0,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
                   boxShadow: [
                     BoxShadow(
                       blurRadius: 3.0,
@@ -269,7 +273,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                           .titleMedium
                                           .override(
                                             fontFamily: 'Outfit',
-                                            color: Color(0xFF090F13),
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryText,
                                             fontSize: 40.0,
                                             fontWeight: FontWeight.w500,
                                           ),
@@ -287,7 +292,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                                       .bodySmall
                                       .override(
                                         fontFamily: 'Outfit',
-                                        color: Color(0xFF7C8791),
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.normal,
                                       ),
