@@ -1,2 +1,7 @@
-# sanIE
-Thesis application for BSIE students of DLSL
+# Picking-System
+
+A new Flutter project.
+
+## Getting Started
+
+FlutterFlow projects are built to run on the Flutter _stable_ release.

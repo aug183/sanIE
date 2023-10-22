@@ -1,0 +1,26 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "operator",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "picked",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "is_priority",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "date_created",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ]
+}
