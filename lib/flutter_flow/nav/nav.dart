@@ -95,9 +95,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ? NavBarPage(initialPage: 'HomePage')
               : NavBarPage(
                   initialPage: 'HomePage',
-                  page: HomePageWidget(
-                    userID: params.getParam('userID', ParamType.String),
-                  ),
+                  page: HomePageWidget(),
                 ),
         ),
         FFRoute(
@@ -108,9 +106,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Orders',
           path: '/orders',
+          requireAuth: true,
           builder: (context, params) => params.isEmpty
               ? NavBarPage(initialPage: 'Orders')
-              : OrdersWidget(),
+              : NavBarPage(
+                  initialPage: 'Orders',
+                  page: OrdersWidget(),
+                ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

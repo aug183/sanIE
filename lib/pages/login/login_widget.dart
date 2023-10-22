@@ -354,15 +354,7 @@ class _LoginWidgetState extends State<LoginWidget>
                                   }
 
                                   context.goNamedAuth(
-                                    'HomePage',
-                                    context.mounted,
-                                    queryParameters: {
-                                      'userID': serializeParam(
-                                        currentUserDisplayName,
-                                        ParamType.String,
-                                      ),
-                                    }.withoutNulls,
-                                  );
+                                      'HomePage', context.mounted);
                                 },
                                 text: 'Sign In',
                                 options: FFButtonOptions(
