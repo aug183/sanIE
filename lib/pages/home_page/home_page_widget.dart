@@ -1,6 +1,8 @@
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +11,13 @@ import 'home_page_model.dart';
 export 'home_page_model.dart';
 
 class HomePageWidget extends StatefulWidget {
-  const HomePageWidget({Key? key}) : super(key: key);
+  const HomePageWidget({
+    Key? key,
+    String? userID,
+  })  : this.userID = userID ?? '',
+        super(key: key);
+
+  final String userID;
 
   @override
   _HomePageWidgetState createState() => _HomePageWidgetState();
@@ -50,7 +58,253 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        backgroundColor: FlutterFlowTheme.of(context).alternate,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primary,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Dashboard',
+            style: FlutterFlowTheme.of(context).displaySmall.override(
+                  fontFamily: 'Outfit',
+                  letterSpacing: 1.0,
+                  fontWeight: FontWeight.bold,
+                  lineHeight: 1.0,
+                ),
+          ),
+          actions: [],
+          centerTitle: true,
+          elevation: 4.0,
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Align(
+              alignment: AlignmentDirectional(-1.00, -1.00),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(18.0, 18.0, 0.0, 0.0),
+                child: Text(
+                  'Order Activity',
+                  textAlign: TextAlign.start,
+                  style: FlutterFlowTheme.of(context).headlineLarge,
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              child: Container(
+                width: MediaQuery.sizeOf(context).width * 1.0,
+                height: 120.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 3.0,
+                      color: Color(0x411D2429),
+                      offset: Offset(0.0, 1.0),
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Icon(
+                        Icons.priority_high_sharp,
+                        color: FlutterFlowTheme.of(context).error,
+                        size: 80.0,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              8.0, 8.0, 4.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder<int>(
+                                future: queryOrdersRecordCount(
+                                  queryBuilder: (ordersRecord) => ordersRecord
+                                      .where(
+                                        'operator',
+                                        isEqualTo: widget.userID,
+                                      )
+                                      .where(
+                                        'picked',
+                                        isEqualTo: false,
+                                      )
+                                      .where(
+                                        'is_priority',
+                                        isEqualTo: true,
+                                      ),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  int textCount = snapshot.data!;
+                                  return Text(
+                                    textCount.toString(),
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: Color(0xFF090F13),
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  );
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 8.0, 0.0),
+                                child: AutoSizeText(
+                                  'Priority Orders',
+                                  textAlign: TextAlign.start,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF7C8791),
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              child: Container(
+                width: MediaQuery.sizeOf(context).width * 1.0,
+                height: 120.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 3.0,
+                      color: Color(0x411D2429),
+                      offset: Offset(0.0, 1.0),
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 8.0, 8.0, 8.0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Icon(
+                        Icons.shopping_bag,
+                        color: FlutterFlowTheme.of(context).success,
+                        size: 80.0,
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              8.0, 8.0, 4.0, 0.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FutureBuilder<int>(
+                                future: queryOrdersRecordCount(
+                                  queryBuilder: (ordersRecord) => ordersRecord
+                                      .where(
+                                        'operator',
+                                        isEqualTo: widget.userID,
+                                      )
+                                      .where(
+                                        'picked',
+                                        isEqualTo: false,
+                                      )
+                                      .where(
+                                        'is_priority',
+                                        isEqualTo: false,
+                                      ),
+                                ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  int textCount = snapshot.data!;
+                                  return Text(
+                                    textCount.toString(),
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: Color(0xFF090F13),
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  );
+                                },
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 4.0, 8.0, 0.0),
+                                child: AutoSizeText(
+                                  'Awaiting Orders',
+                                  textAlign: TextAlign.start,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodySmall
+                                      .override(
+                                        fontFamily: 'Outfit',
+                                        color: Color(0xFF7C8791),
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
