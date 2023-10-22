@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "954520699074",
+    "project_id": "tagging-system-e425f",
+    "storage_bucket": "tagging-system-e425f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954520699074:android:04f89aa954c1c942c3fb5b",
+        "android_client_info": {
+          "package_name": "com.example.tagging_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlM4bsdyP1JUoogYCfIt5wkQiRXZv995s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954520699074:android:9aba515e4723022dc3fb5b",
+        "android_client_info": {
+          "package_name": "com.sanIE.picking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlM4bsdyP1JUoogYCfIt5wkQiRXZv995s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
