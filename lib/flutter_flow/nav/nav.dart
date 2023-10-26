@@ -118,8 +118,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'TallyPage',
           path: '/tallyPage',
           builder: (context, params) => TallyPageWidget(
-            orderID: params.getParam('orderID', ParamType.String),
+            orderID: params.getParam(
+                'orderID', ParamType.DocumentReference, false, ['orders']),
           ),
+        ),
+        FFRoute(
+          name: 'Settings',
+          path: '/settings',
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Settings')
+              : SettingsWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

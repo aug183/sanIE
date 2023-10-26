@@ -136,6 +136,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'HomePage': HomePageWidget(),
       'Orders': OrdersWidget(),
+      'Settings': SettingsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -176,6 +177,18 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24.0,
             ),
             label: 'Orders',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.settings_outlined,
+              size: 24.0,
+            ),
+            activeIcon: Icon(
+              Icons.settings,
+              size: 24.0,
+            ),
+            label: 'Settings',
             tooltip: '',
           )
         ],

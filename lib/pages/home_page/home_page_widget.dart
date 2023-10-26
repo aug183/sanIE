@@ -121,55 +121,53 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AuthUserStreamWidget(
-                                builder: (context) => FutureBuilder<int>(
-                                  future: queryOrdersRecordCount(
-                                    queryBuilder: (ordersRecord) => ordersRecord
-                                        .where(
-                                          'operator',
-                                          isEqualTo: currentUserDisplayName,
-                                        )
-                                        .where(
-                                          'picked',
-                                          isEqualTo: false,
-                                        )
-                                        .where(
-                                          'is_priority',
-                                          isEqualTo: true,
-                                        ),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    int textCount = snapshot.data!;
-                                    return Text(
-                                      textCount.toString(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 40.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    );
-                                  },
+                              FutureBuilder<int>(
+                                future: queryOrdersRecordCount(
+                                  queryBuilder: (ordersRecord) => ordersRecord
+                                      .where(
+                                        'operator',
+                                        isEqualTo: currentUserUid,
+                                      )
+                                      .where(
+                                        'picked',
+                                        isEqualTo: false,
+                                      )
+                                      .where(
+                                        'is_priority',
+                                        isEqualTo: true,
+                                      ),
                                 ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  int textCount = snapshot.data!;
+                                  return Text(
+                                    textCount.toString(),
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  );
+                                },
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -232,55 +230,53 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              AuthUserStreamWidget(
-                                builder: (context) => FutureBuilder<int>(
-                                  future: queryOrdersRecordCount(
-                                    queryBuilder: (ordersRecord) => ordersRecord
-                                        .where(
-                                          'operator',
-                                          isEqualTo: currentUserDisplayName,
-                                        )
-                                        .where(
-                                          'picked',
-                                          isEqualTo: false,
-                                        )
-                                        .where(
-                                          'is_priority',
-                                          isEqualTo: false,
-                                        ),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    int textCount = snapshot.data!;
-                                    return Text(
-                                      textCount.toString(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .titleMedium
-                                          .override(
-                                            fontFamily: 'Outfit',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            fontSize: 40.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    );
-                                  },
+                              FutureBuilder<int>(
+                                future: queryOrdersRecordCount(
+                                  queryBuilder: (ordersRecord) => ordersRecord
+                                      .where(
+                                        'operator',
+                                        isEqualTo: currentUserUid,
+                                      )
+                                      .where(
+                                        'picked',
+                                        isEqualTo: false,
+                                      )
+                                      .where(
+                                        'is_priority',
+                                        isEqualTo: false,
+                                      ),
                                 ),
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context)
+                                                .primary,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  int textCount = snapshot.data!;
+                                  return Text(
+                                    textCount.toString(),
+                                    style: FlutterFlowTheme.of(context)
+                                        .titleMedium
+                                        .override(
+                                          fontFamily: 'Outfit',
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                          fontSize: 40.0,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                  );
+                                },
                               ),
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(

@@ -28,6 +28,12 @@ class FFAppState extends ChangeNotifier {
   set searchActive(bool _value) {
     _searchActive = _value;
   }
+
+  bool _isDarkMode = false;
+  bool get isDarkMode => _isDarkMode;
+  set isDarkMode(bool _value) {
+    _isDarkMode = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {
