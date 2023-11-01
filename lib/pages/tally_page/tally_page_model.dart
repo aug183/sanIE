@@ -1,3 +1,5 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -20,13 +22,13 @@ class TallyPageModel extends FlutterFlowModel<TallyPageWidget> {
 
   final unfocusNode = FocusNode();
   var scannedBarcode = '';
-  // Stores action output result for [Custom Action - checkIfBarcodeIsNull] action in FloatingActionButton widget.
+  // Stores action output result for [Custom Action - checkIfBarcodeIsNull] action in Button widget.
   bool? isBarcodeNull;
-  // Stores action output result for [Custom Action - checkIfBarcodeExists] action in FloatingActionButton widget.
+  // Stores action output result for [Custom Action - checkIfBarcodeExists] action in Button widget.
   bool? barcodeExists;
-  // Stores action output result for [Custom Action - checkTallyAndQuantity] action in FloatingActionButton widget.
+  // Stores action output result for [Custom Action - checkTallyAndQuantity] action in Button widget.
   bool? tallyLessThanQuantity;
-  // Stores action output result for [Custom Action - returnDocumentNumber] action in FloatingActionButton widget.
+  // Stores action output result for [Custom Action - returnDocumentNumber] action in Button widget.
   int? documentNumber;
   AudioPlayer? soundPlayer1;
   AudioPlayer? soundPlayer2;

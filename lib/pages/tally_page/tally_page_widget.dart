@@ -1,3 +1,5 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -70,123 +72,6 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
         child: Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              _model.scannedBarcode = await FlutterBarcodeScanner.scanBarcode(
-                '#C62828', // scanning line color
-                'Cancel', // cancel button text
-                true, // whether to show the flash icon
-                ScanMode.BARCODE,
-              );
-
-              _model.isBarcodeNull = await actions.checkIfBarcodeIsNull(
-                _model.scannedBarcode!,
-              );
-              if (!_model.isBarcodeNull!) {
-                _model.barcodeExists = await actions.checkIfBarcodeExists(
-                  FFAppState().itemAppState.toList(),
-                  _model.scannedBarcode!,
-                );
-                if (_model.barcodeExists!) {
-                  _model.tallyLessThanQuantity =
-                      await actions.checkTallyAndQuantity(
-                    FFAppState().itemAppState.toList(),
-                    _model.scannedBarcode!,
-                  );
-                  if (_model.tallyLessThanQuantity!) {
-                    _model.documentNumber = await actions.returnDocumentNumber(
-                      FFAppState().itemAppState.toList(),
-                      _model.scannedBarcode!,
-                    );
-
-                    context.pushNamed(
-                      'itemConfirmation',
-                      queryParameters: {
-                        'documentNumber': serializeParam(
-                          _model.documentNumber,
-                          ParamType.int,
-                        ),
-                        'orderID': serializeParam(
-                          widget.orderID,
-                          ParamType.String,
-                        ),
-                      }.withoutNulls,
-                      extra: <String, dynamic>{
-                        kTransitionInfoKey: TransitionInfo(
-                          hasTransition: true,
-                          transitionType: PageTransitionType.bottomToTop,
-                        ),
-                      },
-                    );
-                  } else {
-                    // Play Warning
-                    _model.soundPlayer1 ??= AudioPlayer();
-                    if (_model.soundPlayer1!.playing) {
-                      await _model.soundPlayer1!.stop();
-                    }
-                    _model.soundPlayer1!.setVolume(1.0);
-                    _model.soundPlayer1!
-                        .setAsset('assets/audios/MGS_ALERT_sound_effect.mp3')
-                        .then((_) => _model.soundPlayer1!.play());
-
-                    HapticFeedback.mediumImpact();
-                    await showDialog(
-                      context: context,
-                      builder: (alertDialogContext) {
-                        return AlertDialog(
-                          title: Text('Warning'),
-                          content: Text('Tally is more than Quantity'),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(alertDialogContext),
-                              child: Text('Ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
-                } else {
-                  // Play Warning 2
-                  _model.soundPlayer2 ??= AudioPlayer();
-                  if (_model.soundPlayer2!.playing) {
-                    await _model.soundPlayer2!.stop();
-                  }
-                  _model.soundPlayer2!.setVolume(1.0);
-                  _model.soundPlayer2!
-                      .setAsset('assets/audios/MGS_ALERT_sound_effect.mp3')
-                      .then((_) => _model.soundPlayer2!.play());
-
-                  HapticFeedback.mediumImpact();
-                  await showDialog(
-                    context: context,
-                    builder: (alertDialogContext) {
-                      return AlertDialog(
-                        title: Text('Warning'),
-                        content: Text('Item not in the order list'),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(alertDialogContext),
-                            child: Text('Ok'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                }
-              }
-
-              setState(() {});
-            },
-            backgroundColor: FlutterFlowTheme.of(context).primary,
-            elevation: 8.0,
-            child: Icon(
-              Icons.photo_camera,
-              color: FlutterFlowTheme.of(context).info,
-              size: 24.0,
-            ),
-          ),
           appBar: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).primary,
             iconTheme:
@@ -236,17 +121,14 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
             actions: [],
             flexibleSpace: FlexibleSpaceBar(
               title: Align(
-                alignment: AlignmentDirectional(0.00, 0.00),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
-                  child: Text(
-                    'Items needed',
-                    style: FlutterFlowTheme.of(context).titleLarge.override(
-                          fontFamily: 'Outfit',
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
+                alignment: AlignmentDirectional(0.00, 1.00),
+                child: Text(
+                  'Items needed',
+                  style: FlutterFlowTheme.of(context).titleLarge.override(
+                        fontFamily: 'Outfit',
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
               ),
               centerTitle: true,
@@ -392,7 +274,6 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                 ),
                 Container(
                   width: double.infinity,
-                  height: 100.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).secondaryBackground,
                   ),
@@ -421,6 +302,220 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                           padding: EdgeInsets.zero,
                         ),
                       ),
+                      if (functions.progressOutput(
+                              FFAppState().itemAppState.toList()) <
+                          1)
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 12.0, 12.0, 12.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              _model.scannedBarcode =
+                                  await FlutterBarcodeScanner.scanBarcode(
+                                '#C62828', // scanning line color
+                                'Cancel', // cancel button text
+                                true, // whether to show the flash icon
+                                ScanMode.BARCODE,
+                              );
+
+                              _model.isBarcodeNull =
+                                  await actions.checkIfBarcodeIsNull(
+                                _model.scannedBarcode!,
+                              );
+                              if (!_model.isBarcodeNull!) {
+                                _model.barcodeExists =
+                                    await actions.checkIfBarcodeExists(
+                                  FFAppState().itemAppState.toList(),
+                                  _model.scannedBarcode!,
+                                );
+                                if (_model.barcodeExists!) {
+                                  _model.tallyLessThanQuantity =
+                                      await actions.checkTallyAndQuantity(
+                                    FFAppState().itemAppState.toList(),
+                                    _model.scannedBarcode!,
+                                  );
+                                  if (_model.tallyLessThanQuantity!) {
+                                    _model.documentNumber =
+                                        await actions.returnDocumentNumber(
+                                      FFAppState().itemAppState.toList(),
+                                      _model.scannedBarcode!,
+                                    );
+
+                                    context.pushNamed(
+                                      'itemConfirmation',
+                                      queryParameters: {
+                                        'documentNumber': serializeParam(
+                                          _model.documentNumber,
+                                          ParamType.int,
+                                        ),
+                                        'orderID': serializeParam(
+                                          widget.orderID,
+                                          ParamType.String,
+                                        ),
+                                      }.withoutNulls,
+                                      extra: <String, dynamic>{
+                                        kTransitionInfoKey: TransitionInfo(
+                                          hasTransition: true,
+                                          transitionType:
+                                              PageTransitionType.bottomToTop,
+                                        ),
+                                      },
+                                    );
+                                  } else {
+                                    // Play Warning
+                                    _model.soundPlayer1 ??= AudioPlayer();
+                                    if (_model.soundPlayer1!.playing) {
+                                      await _model.soundPlayer1!.stop();
+                                    }
+                                    _model.soundPlayer1!.setVolume(1.0);
+                                    _model.soundPlayer1!
+                                        .setAsset(
+                                            'assets/audios/MGS_ALERT_sound_effect.mp3')
+                                        .then(
+                                            (_) => _model.soundPlayer1!.play());
+
+                                    HapticFeedback.vibrate();
+                                    await showDialog(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: Text('Warning'),
+                                          content: Text(
+                                              'Tally is more than Quantity'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext),
+                                              child: Text('Ok'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
+                                } else {
+                                  // Play Warning 2
+                                  _model.soundPlayer2 ??= AudioPlayer();
+                                  if (_model.soundPlayer2!.playing) {
+                                    await _model.soundPlayer2!.stop();
+                                  }
+                                  _model.soundPlayer2!.setVolume(1.0);
+                                  _model.soundPlayer2!
+                                      .setAsset(
+                                          'assets/audios/MGS_ALERT_sound_effect.mp3')
+                                      .then((_) => _model.soundPlayer2!.play());
+
+                                  HapticFeedback.vibrate();
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: Text('Warning'),
+                                        content:
+                                            Text('Item not in the order list'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              }
+
+                              setState(() {});
+                            },
+                            text: 'Scan item barcode',
+                            icon: Icon(
+                              Icons.camera_alt,
+                              size: 15.0,
+                            ),
+                            options: FFButtonOptions(
+                              width: double.infinity,
+                              height: 40.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  24.0, 0.0, 24.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              elevation: 3.0,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                        ),
+                      if (functions.progressOutput(
+                              FFAppState().itemAppState.toList()) ==
+                          1)
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              12.0, 12.0, 12.0, 12.0),
+                          child: FFButtonWidget(
+                            onPressed: () async {
+                              await widget.orderRef!
+                                  .update(createOrdersRecordData(
+                                picked: true,
+                              ));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    'Order succesfully completed',
+                                    style: TextStyle(
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryText,
+                                    ),
+                                  ),
+                                  duration: Duration(milliseconds: 4000),
+                                  backgroundColor:
+                                      FlutterFlowTheme.of(context).secondary,
+                                ),
+                              );
+                              FFAppState().itemAppState = [];
+
+                              context.goNamed('Orders');
+                            },
+                            text: 'Picking complete',
+                            icon: Icon(
+                              Icons.check_rounded,
+                              size: 15.0,
+                            ),
+                            options: FFButtonOptions(
+                              width: double.infinity,
+                              height: 40.0,
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  24.0, 0.0, 24.0, 0.0),
+                              iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 0.0),
+                              color: FlutterFlowTheme.of(context).primary,
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .titleSmall
+                                  .override(
+                                    fontFamily: 'Readex Pro',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                  ),
+                              elevation: 3.0,
+                              borderSide: BorderSide(
+                                color: Colors.transparent,
+                                width: 1.0,
+                              ),
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
