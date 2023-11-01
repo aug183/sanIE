@@ -33,8 +33,8 @@ String progressText(List<ItemTypeStruct> inputType) {
     quantityTotal += inputType[x].quantity;
     tallyTotal += inputType[x].tally;
   }
-  double percent = tallyTotal / quantityTotal;
-  String output = percent.toString();
+  double percent = (tallyTotal / quantityTotal) * 100;
+  String output = percent.toStringAsPrecision(3);
   output = output + "%";
   return output;
 }
