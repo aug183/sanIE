@@ -237,13 +237,16 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
             flexibleSpace: FlexibleSpaceBar(
               title: Align(
                 alignment: AlignmentDirectional(0.00, 0.00),
-                child: Text(
-                  'Items needed',
-                  style: FlutterFlowTheme.of(context).titleLarge.override(
-                        fontFamily: 'Outfit',
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 25.0, 0.0, 0.0),
+                  child: Text(
+                    'Items needed',
+                    style: FlutterFlowTheme.of(context).titleLarge.override(
+                          fontFamily: 'Outfit',
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                 ),
               ),
               centerTitle: true,
