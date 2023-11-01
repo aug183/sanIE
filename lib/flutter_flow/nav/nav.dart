@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -117,7 +118,27 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'TallyPage',
           path: '/tallyPage',
+          requireAuth: true,
           builder: (context, params) => TallyPageWidget(
+            orderRef: params.getParam(
+                'orderRef', ParamType.DocumentReference, false, ['orders']),
+            orderID: params.getParam('orderID', ParamType.String),
+          ),
+        ),
+        FFRoute(
+          name: 'Settings',
+          path: '/settings',
+          requireAuth: true,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Settings')
+              : SettingsWidget(),
+        ),
+        FFRoute(
+          name: 'itemConfirmation',
+          path: '/itemConfirmation',
+          requireAuth: true,
+          builder: (context, params) => ItemConfirmationWidget(
+            documentNumber: params.getParam('documentNumber', ParamType.int),
             orderID: params.getParam('orderID', ParamType.String),
           ),
         )
