@@ -82,7 +82,6 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
               _model.isBarcodeNull = await actions.checkIfBarcodeIsNull(
                 _model.scannedBarcode!,
               );
-              context.safePop();
               if (!_model.isBarcodeNull!) {
                 _model.barcodeExists = await actions.checkIfBarcodeExists(
                   FFAppState().itemAppState.toList(),

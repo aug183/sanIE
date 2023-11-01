@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 Future<bool> checkIfBarcodeIsNull(String barcode) async {
   // Add your function code here!
-  if (barcode == '') {
+  if (barcode == '-1') {
     return true;
   } else {
     return false;
