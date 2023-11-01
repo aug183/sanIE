@@ -21,11 +21,6 @@ class ItemsRecord extends FirestoreRecord {
   String get itemName => _itemName ?? '';
   bool hasItemName() => _itemName != null;
 
-  // "quantity" field.
-  double? _quantity;
-  double get quantity => _quantity ?? 0.0;
-  bool hasQuantity() => _quantity != null;
-
   // "barcode" field.
   String? _barcode;
   String get barcode => _barcode ?? '';
@@ -36,19 +31,24 @@ class ItemsRecord extends FirestoreRecord {
   String get location => _location ?? '';
   bool hasLocation() => _location != null;
 
+  // "quantity" field.
+  int? _quantity;
+  int get quantity => _quantity ?? 0;
+  bool hasQuantity() => _quantity != null;
+
   // "tally" field.
-  double? _tally;
-  double get tally => _tally ?? 0.0;
+  int? _tally;
+  int get tally => _tally ?? 0;
   bool hasTally() => _tally != null;
 
   DocumentReference get parentReference => reference.parent.parent!;
 
   void _initializeFields() {
     _itemName = snapshotData['item_name'] as String?;
-    _quantity = castToType<double>(snapshotData['quantity']);
     _barcode = snapshotData['barcode'] as String?;
     _location = snapshotData['location'] as String?;
-    _tally = castToType<double>(snapshotData['tally']);
+    _quantity = castToType<int>(snapshotData['quantity']);
+    _tally = castToType<int>(snapshotData['tally']);
   }
 
   static Query<Map<String, dynamic>> collection([DocumentReference? parent]) =>
@@ -91,17 +91,17 @@ class ItemsRecord extends FirestoreRecord {
 
 Map<String, dynamic> createItemsRecordData({
   String? itemName,
-  double? quantity,
   String? barcode,
   String? location,
-  double? tally,
+  int? quantity,
+  int? tally,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'item_name': itemName,
-      'quantity': quantity,
       'barcode': barcode,
       'location': location,
+      'quantity': quantity,
       'tally': tally,
     }.withoutNulls,
   );
@@ -115,15 +115,15 @@ class ItemsRecordDocumentEquality implements Equality<ItemsRecord> {
   @override
   bool equals(ItemsRecord? e1, ItemsRecord? e2) {
     return e1?.itemName == e2?.itemName &&
-        e1?.quantity == e2?.quantity &&
         e1?.barcode == e2?.barcode &&
         e1?.location == e2?.location &&
+        e1?.quantity == e2?.quantity &&
         e1?.tally == e2?.tally;
   }
 
   @override
   int hash(ItemsRecord? e) => const ListEquality()
-      .hash([e?.itemName, e?.quantity, e?.barcode, e?.location, e?.tally]);
+      .hash([e?.itemName, e?.barcode, e?.location, e?.quantity, e?.tally]);
 
   @override
   bool isValidKey(Object? o) => o is ItemsRecord;

@@ -1,9 +1,14 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -209,9 +214,9 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                                 TextSearch(
                                               ordersOrdersRecordList
                                                   .map(
-                                                    (record) => TextSearchItem(
-                                                        record,
-                                                        [record.orderId!]),
+                                                    (record) => TextSearchItem
+                                                        .fromTerms(record,
+                                                            [record.orderId!]),
                                                   )
                                                   .toList(),
                                             )
@@ -361,12 +366,33 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                           ) ??
                                           false;
                                   if (confirmDialogResponse) {
+                                    _model.itemQuery =
+                                        await queryItemsRecordOnce(
+                                      parent: ordersNoSearchItem.reference,
+                                      queryBuilder: (itemsRecord) =>
+                                          itemsRecord.orderBy('quantity'),
+                                    );
+                                    _model.dataTypeContent =
+                                        await actions.documenToDataType(
+                                      _model.itemQuery!.toList(),
+                                    );
+                                    setState(() {
+                                      FFAppState().itemAppState = _model
+                                          .dataTypeContent!
+                                          .toList()
+                                          .cast<ItemTypeStruct>();
+                                    });
+
                                     context.pushNamed(
                                       'TallyPage',
                                       queryParameters: {
-                                        'orderID': serializeParam(
+                                        'orderRef': serializeParam(
                                           ordersNoSearchItem.reference,
                                           ParamType.DocumentReference,
+                                        ),
+                                        'orderID': serializeParam(
+                                          ordersNoSearchItem.orderId,
+                                          ParamType.String,
                                         ),
                                       }.withoutNulls,
                                       extra: <String, dynamic>{
@@ -379,6 +405,8 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                       },
                                     );
                                   }
+
+                                  setState(() {});
                                 },
                                 child: Material(
                                   color: Colors.transparent,
@@ -435,54 +463,82 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                ordersNoSearchItem.orderId,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    'Date: ',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
+                                              Container(
+                                                width:
+                                                    MediaQuery.sizeOf(context)
+                                                            .width *
+                                                        0.5,
+                                                height:
+                                                    MediaQuery.sizeOf(context)
+                                                            .height *
+                                                        0.1,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      ordersNoSearchItem
+                                                          .orderId,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                      minFontSize: 10.0,
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Date: ',
+                                                          style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .secondaryText,
-                                                          fontSize: 15.0,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                fontSize: 15.0,
+                                                              ),
                                                         ),
-                                                  ),
-                                                  Text(
-                                                    dateTimeFormat(
-                                                        'yMMMd',
-                                                        ordersNoSearchItem
-                                                            .dateCreated!),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
+                                                        Text(
+                                                          dateTimeFormat(
+                                                              'yMMMd',
+                                                              ordersNoSearchItem
+                                                                  .dateCreated!),
+                                                          style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .secondaryText,
-                                                          fontSize: 15.0,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                fontSize: 15.0,
+                                                              ),
                                                         ),
-                                                  ),
-                                                ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -548,12 +604,33 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                           ) ??
                                           false;
                                   if (confirmDialogResponse) {
+                                    _model.itemQuery2 =
+                                        await queryItemsRecordOnce(
+                                      parent: ordersNoSearchItem.reference,
+                                      queryBuilder: (itemsRecord) =>
+                                          itemsRecord.orderBy('quantity'),
+                                    );
+                                    _model.dataTypeContent2 =
+                                        await actions.documenToDataType(
+                                      _model.itemQuery2!.toList(),
+                                    );
+                                    setState(() {
+                                      FFAppState().itemAppState = _model
+                                          .dataTypeContent2!
+                                          .toList()
+                                          .cast<ItemTypeStruct>();
+                                    });
+
                                     context.goNamed(
                                       'TallyPage',
                                       queryParameters: {
-                                        'orderID': serializeParam(
+                                        'orderRef': serializeParam(
                                           ordersNoSearchItem.reference,
                                           ParamType.DocumentReference,
+                                        ),
+                                        'orderID': serializeParam(
+                                          ordersNoSearchItem.orderId,
+                                          ParamType.String,
                                         ),
                                       }.withoutNulls,
                                       extra: <String, dynamic>{
@@ -566,6 +643,8 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                       },
                                     );
                                   }
+
+                                  setState(() {});
                                 },
                                 child: Material(
                                   color: Colors.transparent,
@@ -622,54 +701,82 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                ordersNoSearchItem.orderId,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 20.0,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    'Date: ',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
+                                              Container(
+                                                width:
+                                                    MediaQuery.sizeOf(context)
+                                                            .width *
+                                                        0.5,
+                                                height:
+                                                    MediaQuery.sizeOf(context)
+                                                            .height *
+                                                        0.1,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                ),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    AutoSizeText(
+                                                      ordersNoSearchItem
+                                                          .orderId,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontSize: 20.0,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                      minFontSize: 10.0,
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Text(
+                                                          'Date: ',
+                                                          style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .secondaryText,
-                                                          fontSize: 15.0,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                fontSize: 15.0,
+                                                              ),
                                                         ),
-                                                  ),
-                                                  Text(
-                                                    dateTimeFormat(
-                                                        'yMMMd',
-                                                        ordersNoSearchItem
-                                                            .dateCreated!),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: FlutterFlowTheme
+                                                        Text(
+                                                          dateTimeFormat(
+                                                              'yMMMd',
+                                                              ordersNoSearchItem
+                                                                  .dateCreated!),
+                                                          style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .secondaryText,
-                                                          fontSize: 15.0,
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                fontSize: 15.0,
+                                                              ),
                                                         ),
-                                                  ),
-                                                ],
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           ),

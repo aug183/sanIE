@@ -3,33 +3,25 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/flutter_flow/custom_functions.dart' as functions;
-import 'tally_page_widget.dart' show TallyPageWidget;
+import 'item_confirmation_widget.dart' show ItemConfirmationWidget;
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:provider/provider.dart';
 
-class TallyPageModel extends FlutterFlowModel<TallyPageWidget> {
+class ItemConfirmationModel extends FlutterFlowModel<ItemConfirmationWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  var scannedBarcode = '';
-  // Stores action output result for [Custom Action - checkIfBarcodeIsNull] action in FloatingActionButton widget.
+  var orderBarcode = '';
+  // Stores action output result for [Custom Action - checkIfBarcodeIsNull] action in Button widget.
   bool? isBarcodeNull;
-  // Stores action output result for [Custom Action - checkIfBarcodeExists] action in FloatingActionButton widget.
-  bool? barcodeExists;
-  // Stores action output result for [Custom Action - checkTallyAndQuantity] action in FloatingActionButton widget.
-  bool? tallyLessThanQuantity;
-  // Stores action output result for [Custom Action - returnDocumentNumber] action in FloatingActionButton widget.
-  int? documentNumber;
-  AudioPlayer? soundPlayer1;
-  AudioPlayer? soundPlayer2;
+  // Stores action output result for [Custom Action - checkIfScannedOrderIsCorrect] action in Button widget.
+  bool? isScannedOrderCorrect;
+  AudioPlayer? soundPlayer;
 
   /// Initialization and disposal methods.
 

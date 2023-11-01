@@ -87,7 +87,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(12.0, 15.0, 12.0, 0.0),
               child: Container(
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: 120.0,
@@ -196,7 +196,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              padding: EdgeInsetsDirectional.fromSTEB(12.0, 15.0, 12.0, 0.0),
               child: Container(
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: 120.0,
