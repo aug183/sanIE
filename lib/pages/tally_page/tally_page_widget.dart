@@ -291,7 +291,7 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          _model.scannedBarcode!,
+                                          'Pick',
                                           style: FlutterFlowTheme.of(context)
                                               .headlineMedium
                                               .override(
@@ -403,14 +403,15 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                         child: LinearPercentIndicator(
                           percent: functions.progressOutput(
                               FFAppState().itemAppState.toList()),
-                          width: 120.0,
                           lineHeight: 50.0,
                           animation: true,
                           animateFromLastPercent: true,
                           progressColor: FlutterFlowTheme.of(context).primary,
-                          backgroundColor: FlutterFlowTheme.of(context).accent4,
+                          backgroundColor:
+                              FlutterFlowTheme.of(context).secondary,
                           center: Text(
-                            '50%',
+                            functions.progressText(
+                                FFAppState().itemAppState.toList()),
                             style: FlutterFlowTheme.of(context).headlineSmall,
                           ),
                           barRadius: Radius.circular(12.0),

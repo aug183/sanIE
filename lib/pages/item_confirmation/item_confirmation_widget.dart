@@ -190,10 +190,12 @@ class _ItemConfirmationWidgetState extends State<ItemConfirmationWidget> {
                           widget.orderID!,
                         );
                         if (_model.isScannedOrderCorrect!) {
-                          FFAppState().updateItemAppStateAtIndex(
-                            widget.documentNumber!,
-                            (e) => e..incrementTally(1),
-                          );
+                          FFAppState().update(() {
+                            FFAppState().updateItemAppStateAtIndex(
+                              widget.documentNumber!,
+                              (e) => e..incrementTally(1),
+                            );
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

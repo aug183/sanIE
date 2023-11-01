@@ -24,3 +24,17 @@ double progressOutput(List<ItemTypeStruct> listOfItems) {
   double progress = totalTally / totalQuantity;
   return progress;
 }
+
+String progressText(List<ItemTypeStruct> inputType) {
+  double quantityTotal = 0;
+  double tallyTotal = 0;
+
+  for (int x = 0; x < inputType.length; x++) {
+    quantityTotal += inputType[x].quantity;
+    tallyTotal += inputType[x].tally;
+  }
+  double percent = tallyTotal / quantityTotal;
+  String output = percent.toString();
+  output = output + "%";
+  return output;
+}
