@@ -58,6 +58,41 @@ class FFAppState extends ChangeNotifier {
   void insertAtIndexInItemAppState(int _index, ItemTypeStruct _value) {
     _itemAppState.insert(_index, _value);
   }
+
+  int _totalItems = 0;
+  int get totalItems => _totalItems;
+  set totalItems(int _value) {
+    _totalItems = _value;
+  }
+
+  List<ProductTypeStruct> _productList = [];
+  List<ProductTypeStruct> get productList => _productList;
+  set productList(List<ProductTypeStruct> _value) {
+    _productList = _value;
+  }
+
+  void addToProductList(ProductTypeStruct _value) {
+    _productList.add(_value);
+  }
+
+  void removeFromProductList(ProductTypeStruct _value) {
+    _productList.remove(_value);
+  }
+
+  void removeAtIndexFromProductList(int _index) {
+    _productList.removeAt(_index);
+  }
+
+  void updateProductListAtIndex(
+    int _index,
+    ProductTypeStruct Function(ProductTypeStruct) updateFn,
+  ) {
+    _productList[_index] = updateFn(_productList[_index]);
+  }
+
+  void insertAtIndexInProductList(int _index, ProductTypeStruct _value) {
+    _productList.insert(_index, _value);
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

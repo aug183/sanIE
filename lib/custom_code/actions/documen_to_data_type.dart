@@ -16,7 +16,6 @@ Future<List<ItemTypeStruct>> documenToDataType(
 
   for (var document in documentList) {
     ItemTypeStruct dataType = ItemTypeStruct(
-      uid: document.reference,
       itemName: document.itemName,
       barcode: document.barcode,
       quantity: document.quantity,

@@ -11,14 +11,12 @@ import '/flutter_flow/flutter_flow_util.dart';
 class ItemTypeStruct extends FFFirebaseStruct {
   ItemTypeStruct({
     String? barcode,
-    DocumentReference? uid,
     int? quantity,
     int? tally,
     String? location,
     String? itemName,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _barcode = barcode,
-        _uid = uid,
         _quantity = quantity,
         _tally = tally,
         _location = location,
@@ -30,12 +28,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
   String get barcode => _barcode ?? '';
   set barcode(String? val) => _barcode = val;
   bool hasBarcode() => _barcode != null;
-
-  // "uid" field.
-  DocumentReference? _uid;
-  DocumentReference? get uid => _uid;
-  set uid(DocumentReference? val) => _uid = val;
-  bool hasUid() => _uid != null;
 
   // "quantity" field.
   int? _quantity;
@@ -65,7 +57,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
 
   static ItemTypeStruct fromMap(Map<String, dynamic> data) => ItemTypeStruct(
         barcode: data['barcode'] as String?,
-        uid: data['uid'] as DocumentReference?,
         quantity: castToType<int>(data['quantity']),
         tally: castToType<int>(data['tally']),
         location: data['location'] as String?,
@@ -77,7 +68,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
 
   Map<String, dynamic> toMap() => {
         'barcode': _barcode,
-        'uid': _uid,
         'quantity': _quantity,
         'tally': _tally,
         'location': _location,
@@ -89,10 +79,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
         'barcode': serializeParam(
           _barcode,
           ParamType.String,
-        ),
-        'uid': serializeParam(
-          _uid,
-          ParamType.DocumentReference,
         ),
         'quantity': serializeParam(
           _quantity,
@@ -118,12 +104,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
           data['barcode'],
           ParamType.String,
           false,
-        ),
-        uid: deserializeParam(
-          data['uid'],
-          ParamType.DocumentReference,
-          false,
-          collectionNamePath: ['orders', 'items'],
         ),
         quantity: deserializeParam(
           data['quantity'],
@@ -154,7 +134,6 @@ class ItemTypeStruct extends FFFirebaseStruct {
   bool operator ==(Object other) {
     return other is ItemTypeStruct &&
         barcode == other.barcode &&
-        uid == other.uid &&
         quantity == other.quantity &&
         tally == other.tally &&
         location == other.location &&
@@ -162,13 +141,12 @@ class ItemTypeStruct extends FFFirebaseStruct {
   }
 
   @override
-  int get hashCode => const ListEquality()
-      .hash([barcode, uid, quantity, tally, location, itemName]);
+  int get hashCode =>
+      const ListEquality().hash([barcode, quantity, tally, location, itemName]);
 }
 
 ItemTypeStruct createItemTypeStruct({
   String? barcode,
-  DocumentReference? uid,
   int? quantity,
   int? tally,
   String? location,
@@ -180,7 +158,6 @@ ItemTypeStruct createItemTypeStruct({
 }) =>
     ItemTypeStruct(
       barcode: barcode,
-      uid: uid,
       quantity: quantity,
       tally: tally,
       location: location,

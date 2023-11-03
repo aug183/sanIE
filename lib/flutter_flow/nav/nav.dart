@@ -123,6 +123,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             orderRef: params.getParam(
                 'orderRef', ParamType.DocumentReference, false, ['orders']),
             orderID: params.getParam('orderID', ParamType.String),
+            isCancelled: params.getParam('isCancelled', ParamType.bool),
           ),
         ),
         FFRoute(
@@ -141,6 +142,68 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             documentNumber: params.getParam('documentNumber', ParamType.int),
             orderID: params.getParam('orderID', ParamType.String),
           ),
+        ),
+        FFRoute(
+          name: 'changePassword',
+          path: '/changePassword',
+          requireAuth: true,
+          builder: (context, params) => ChangePasswordWidget(),
+        ),
+        FFRoute(
+          name: 'historyPage',
+          path: '/historyPage',
+          requireAuth: true,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'historyPage')
+              : NavBarPage(
+                  initialPage: 'historyPage',
+                  page: HistoryPageWidget(),
+                ),
+        ),
+        FFRoute(
+          name: 'Cart',
+          path: '/cart',
+          requireAuth: true,
+          asyncParams: {
+            'productList':
+                getDocList(['products'], ProductsRecord.fromSnapshot),
+          },
+          builder: (context, params) => CartWidget(
+            productList: params.getParam<ProductsRecord>(
+                'productList', ParamType.Document, true),
+          ),
+        ),
+        FFRoute(
+          name: 'selectProducts',
+          path: '/selectProducts',
+          requireAuth: true,
+          asyncParams: {
+            'productDocument':
+                getDocList(['products'], ProductsRecord.fromSnapshot),
+          },
+          builder: (context, params) => SelectProductsWidget(
+            productDocument: params.getParam<ProductsRecord>(
+                'productDocument', ParamType.Document, true),
+          ),
+        ),
+        FFRoute(
+          name: 'CreateAccount',
+          path: '/createAccount',
+          builder: (context, params) => CreateAccountWidget(),
+        ),
+        FFRoute(
+          name: 'productsPage',
+          path: '/productsPage',
+          requireAuth: true,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'productsPage')
+              : ProductsPageWidget(),
+        ),
+        FFRoute(
+          name: 'addProductsPage',
+          path: '/addProductsPage',
+          requireAuth: true,
+          builder: (context, params) => AddProductsPageWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -68,7 +68,7 @@ class _ItemConfirmationWidgetState extends State<ItemConfirmationWidget> {
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primary,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             iconTheme:
                 IconThemeData(color: FlutterFlowTheme.of(context).primaryText),
             automaticallyImplyLeading: false,
@@ -154,6 +154,12 @@ class _ItemConfirmationWidgetState extends State<ItemConfirmationWidget> {
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Image.asset(
+                        'assets/images/error_image.jpg',
+                        width: 300.0,
+                        height: 200.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
