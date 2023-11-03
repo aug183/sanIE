@@ -23,10 +23,12 @@ class TallyPageWidget extends StatefulWidget {
     Key? key,
     required this.orderRef,
     required this.orderID,
+    required this.isCancelled,
   }) : super(key: key);
 
   final DocumentReference? orderRef;
   final String? orderID;
+  final bool? isCancelled;
 
   @override
   _TallyPageWidgetState createState() => _TallyPageWidgetState();
@@ -73,48 +75,51 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primary,
+            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             iconTheme:
                 IconThemeData(color: FlutterFlowTheme.of(context).secondary),
             automaticallyImplyLeading: false,
             leading: Align(
               alignment: AlignmentDirectional(0.00, 0.00),
-              child: InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  var confirmDialogResponse = await showDialog<bool>(
-                        context: context,
-                        builder: (alertDialogContext) {
-                          return AlertDialog(
-                            title: Text('Notice'),
-                            content: Text('Cancel order tracking?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(alertDialogContext, false),
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () =>
-                                    Navigator.pop(alertDialogContext, true),
-                                child: Text('Confirm'),
-                              ),
-                            ],
-                          );
-                        },
-                      ) ??
-                      false;
-                  if (confirmDialogResponse) {
-                    FFAppState().itemAppState = [];
-                    context.safePop();
-                  }
-                },
-                child: Text(
-                  'Cancel',
-                  style: FlutterFlowTheme.of(context).bodyMedium,
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () async {
+                    var confirmDialogResponse = await showDialog<bool>(
+                          context: context,
+                          builder: (alertDialogContext) {
+                            return AlertDialog(
+                              title: Text('Notice'),
+                              content: Text('Cancel order tracking?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext, false),
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(alertDialogContext, true),
+                                  child: Text('Confirm'),
+                                ),
+                              ],
+                            );
+                          },
+                        ) ??
+                        false;
+                    if (confirmDialogResponse) {
+                      FFAppState().itemAppState = [];
+                      context.safePop();
+                    }
+                  },
+                  child: Text(
+                    'Cancel',
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                  ),
                 ),
               ),
             ),
@@ -272,207 +277,315 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                     ),
                   ],
                 ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondaryBackground,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            12.0, 0.0, 12.0, 0.0),
-                        child: LinearPercentIndicator(
-                          percent: functions.progressOutput(
-                              FFAppState().itemAppState.toList()),
-                          lineHeight: 50.0,
-                          animation: true,
-                          animateFromLastPercent: true,
-                          progressColor: FlutterFlowTheme.of(context).primary,
-                          backgroundColor:
-                              FlutterFlowTheme.of(context).secondary,
-                          center: Text(
-                            functions.progressText(
-                                FFAppState().itemAppState.toList()),
-                            style: FlutterFlowTheme.of(context).headlineSmall,
-                          ),
-                          barRadius: Radius.circular(12.0),
-                          padding: EdgeInsets.zero,
-                        ),
+                if ((valueOrDefault<bool>(currentUserDocument?.admin, false) ==
+                        false) &&
+                    (valueOrDefault<bool>(
+                            currentUserDocument?.manager, false) ==
+                        false) &&
+                    (widget.isCancelled == false))
+                  AuthUserStreamWidget(
+                    builder: (context) => Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
-                      if (functions.progressOutput(
-                              FFAppState().itemAppState.toList()) <
-                          1)
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 12.0, 12.0, 12.0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
-                              _model.scannedBarcode =
-                                  await FlutterBarcodeScanner.scanBarcode(
-                                '#C62828', // scanning line color
-                                'Cancel', // cancel button text
-                                true, // whether to show the flash icon
-                                ScanMode.BARCODE,
-                              );
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                12.0, 0.0, 12.0, 0.0),
+                            child: LinearPercentIndicator(
+                              percent: functions.progressOutput(
+                                  FFAppState().itemAppState.toList()),
+                              lineHeight: 50.0,
+                              animation: true,
+                              animateFromLastPercent: true,
+                              progressColor:
+                                  FlutterFlowTheme.of(context).primary,
+                              backgroundColor:
+                                  FlutterFlowTheme.of(context).secondary,
+                              center: Text(
+                                functions.progressText(
+                                    FFAppState().itemAppState.toList()),
+                                style:
+                                    FlutterFlowTheme.of(context).headlineSmall,
+                              ),
+                              barRadius: Radius.circular(12.0),
+                              padding: EdgeInsets.zero,
+                            ),
+                          ),
+                          if (functions.progressOutput(
+                                  FFAppState().itemAppState.toList()) <
+                              1)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 12.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  _model.scannedBarcode =
+                                      await FlutterBarcodeScanner.scanBarcode(
+                                    '#C62828', // scanning line color
+                                    'Cancel', // cancel button text
+                                    true, // whether to show the flash icon
+                                    ScanMode.BARCODE,
+                                  );
 
-                              _model.isBarcodeNull =
-                                  await actions.checkIfBarcodeIsNull(
-                                _model.scannedBarcode!,
-                              );
-                              if (!_model.isBarcodeNull!) {
-                                _model.barcodeExists =
-                                    await actions.checkIfBarcodeExists(
-                                  FFAppState().itemAppState.toList(),
-                                  _model.scannedBarcode!,
-                                );
-                                if (_model.barcodeExists!) {
-                                  _model.tallyLessThanQuantity =
-                                      await actions.checkTallyAndQuantity(
-                                    FFAppState().itemAppState.toList(),
+                                  _model.isBarcodeNull =
+                                      await actions.checkIfBarcodeIsNull(
                                     _model.scannedBarcode!,
                                   );
-                                  if (_model.tallyLessThanQuantity!) {
-                                    _model.documentNumber =
-                                        await actions.returnDocumentNumber(
+                                  if (!_model.isBarcodeNull!) {
+                                    _model.barcodeExists =
+                                        await actions.checkIfBarcodeExists(
                                       FFAppState().itemAppState.toList(),
                                       _model.scannedBarcode!,
                                     );
-
-                                    context.pushNamed(
-                                      'itemConfirmation',
-                                      queryParameters: {
-                                        'documentNumber': serializeParam(
-                                          _model.documentNumber,
-                                          ParamType.int,
-                                        ),
-                                        'orderID': serializeParam(
-                                          widget.orderID,
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                      extra: <String, dynamic>{
-                                        kTransitionInfoKey: TransitionInfo(
-                                          hasTransition: true,
-                                          transitionType:
-                                              PageTransitionType.bottomToTop,
-                                        ),
-                                      },
-                                    );
-                                  } else {
-                                    // Play Warning
-                                    _model.soundPlayer1 ??= AudioPlayer();
-                                    if (_model.soundPlayer1!.playing) {
-                                      await _model.soundPlayer1!.stop();
-                                    }
-                                    _model.soundPlayer1!.setVolume(1.0);
-                                    _model.soundPlayer1!
-                                        .setAsset(
-                                            'assets/audios/MGS_ALERT_sound_effect.mp3')
-                                        .then(
-                                            (_) => _model.soundPlayer1!.play());
-
-                                    HapticFeedback.vibrate();
-                                    await showDialog(
-                                      context: context,
-                                      builder: (alertDialogContext) {
-                                        return AlertDialog(
-                                          title: Text('Warning'),
-                                          content: Text(
-                                              'Tally is more than Quantity'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  alertDialogContext),
-                                              child: Text('Ok'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
-                                } else {
-                                  // Play Warning 2
-                                  _model.soundPlayer2 ??= AudioPlayer();
-                                  if (_model.soundPlayer2!.playing) {
-                                    await _model.soundPlayer2!.stop();
-                                  }
-                                  _model.soundPlayer2!.setVolume(1.0);
-                                  _model.soundPlayer2!
-                                      .setAsset(
-                                          'assets/audios/MGS_ALERT_sound_effect.mp3')
-                                      .then((_) => _model.soundPlayer2!.play());
-
-                                  HapticFeedback.vibrate();
-                                  await showDialog(
-                                    context: context,
-                                    builder: (alertDialogContext) {
-                                      return AlertDialog(
-                                        title: Text('Warning'),
-                                        content:
-                                            Text('Item not in the order list'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(
-                                                alertDialogContext),
-                                            child: Text('Ok'),
-                                          ),
-                                        ],
+                                    if (_model.barcodeExists!) {
+                                      _model.tallyLessThanQuantity =
+                                          await actions.checkTallyAndQuantity(
+                                        FFAppState().itemAppState.toList(),
+                                        _model.scannedBarcode!,
                                       );
-                                    },
-                                  );
-                                }
-                              }
+                                      if (_model.tallyLessThanQuantity!) {
+                                        _model.documentNumber =
+                                            await actions.returnDocumentNumber(
+                                          FFAppState().itemAppState.toList(),
+                                          _model.scannedBarcode!,
+                                        );
 
-                              setState(() {});
-                            },
-                            text: 'Scan item barcode',
-                            icon: Icon(
-                              Icons.camera_alt,
-                              size: 15.0,
-                            ),
-                            options: FFButtonOptions(
-                              width: double.infinity,
-                              height: 40.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
+                                        context.pushNamed(
+                                          'itemConfirmation',
+                                          queryParameters: {
+                                            'documentNumber': serializeParam(
+                                              _model.documentNumber,
+                                              ParamType.int,
+                                            ),
+                                            'orderID': serializeParam(
+                                              widget.orderID,
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                          extra: <String, dynamic>{
+                                            kTransitionInfoKey: TransitionInfo(
+                                              hasTransition: true,
+                                              transitionType: PageTransitionType
+                                                  .bottomToTop,
+                                            ),
+                                          },
+                                        );
+                                      } else {
+                                        // Play Warning
+                                        _model.soundPlayer1 ??= AudioPlayer();
+                                        if (_model.soundPlayer1!.playing) {
+                                          await _model.soundPlayer1!.stop();
+                                        }
+                                        _model.soundPlayer1!.setVolume(1.0);
+                                        _model.soundPlayer1!
+                                            .setAsset(
+                                                'assets/audios/MGS_ALERT_sound_effect.mp3')
+                                            .then((_) =>
+                                                _model.soundPlayer1!.play());
+
+                                        HapticFeedback.vibrate();
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Warning'),
+                                              content: Text(
+                                                  'Tally is more than Quantity'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
+                                    } else {
+                                      // Play Warning 2
+                                      _model.soundPlayer2 ??= AudioPlayer();
+                                      if (_model.soundPlayer2!.playing) {
+                                        await _model.soundPlayer2!.stop();
+                                      }
+                                      _model.soundPlayer2!.setVolume(1.0);
+                                      _model.soundPlayer2!
+                                          .setAsset(
+                                              'assets/audios/MGS_ALERT_sound_effect.mp3')
+                                          .then((_) =>
+                                              _model.soundPlayer2!.play());
+
+                                      HapticFeedback.vibrate();
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('Warning'),
+                                            content: Text(
+                                                'Item not in the order list'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
+                                  }
+
+                                  setState(() {});
+                                },
+                                text: 'Scan item barcode',
+                                icon: Icon(
+                                  Icons.camera_alt,
+                                  size: 15.0,
+                                ),
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24.0, 0.0, 24.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
                                   ),
-                              elevation: 3.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
                               ),
-                              borderRadius: BorderRadius.circular(12.0),
                             ),
-                          ),
-                        ),
-                      if (functions.progressOutput(
-                              FFAppState().itemAppState.toList()) ==
-                          1)
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 12.0, 12.0, 12.0),
-                          child: FFButtonWidget(
-                            onPressed: () async {
+                          if (functions.progressOutput(
+                                  FFAppState().itemAppState.toList()) ==
+                              1)
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  12.0, 12.0, 12.0, 12.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  await widget.orderRef!
+                                      .update(createOrdersRecordData(
+                                    picked: true,
+                                    dateCompleted: getCurrentTimestamp,
+                                  ));
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        'Order succesfully completed',
+                                        style: TextStyle(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryText,
+                                        ),
+                                      ),
+                                      duration: Duration(milliseconds: 4000),
+                                      backgroundColor:
+                                          FlutterFlowTheme.of(context)
+                                              .secondary,
+                                    ),
+                                  );
+                                  FFAppState().itemAppState = [];
+
+                                  context.goNamed('Orders');
+                                },
+                                text: 'Picking complete',
+                                icon: Icon(
+                                  Icons.check_rounded,
+                                  size: 15.0,
+                                ),
+                                options: FFButtonOptions(
+                                  width: double.infinity,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24.0, 0.0, 24.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Readex Pro',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                if ((valueOrDefault<bool>(currentUserDocument?.admin, false) ==
+                        true) &&
+                    (widget.isCancelled == false))
+                  AuthUserStreamWidget(
+                    builder: (context) => Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            var confirmDialogResponse = await showDialog<bool>(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: Text('Confirm'),
+                                      content: Text(
+                                          'Are you sure you want to cancel order?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, false),
+                                          child: Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(
+                                              alertDialogContext, true),
+                                          child: Text('Confirm'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ) ??
+                                false;
+                            if (confirmDialogResponse) {
                               await widget.orderRef!
                                   .update(createOrdersRecordData(
                                 picked: true,
+                                dateCompleted: getCurrentTimestamp,
+                                cancelled: true,
                               ));
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
-                                    'Order succesfully completed',
+                                    'Order Succesfully Cancelled',
                                     style: TextStyle(
                                       color: FlutterFlowTheme.of(context)
                                           .primaryText,
@@ -480,45 +593,44 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                                   ),
                                   duration: Duration(milliseconds: 4000),
                                   backgroundColor:
-                                      FlutterFlowTheme.of(context).secondary,
+                                      FlutterFlowTheme.of(context).success,
                                 ),
                               );
-                              FFAppState().itemAppState = [];
 
                               context.goNamed('Orders');
-                            },
-                            text: 'Picking complete',
-                            icon: Icon(
-                              Icons.check_rounded,
-                              size: 15.0,
+                            }
+                          },
+                          text: 'Cancel Order',
+                          icon: Icon(
+                            Icons.cancel,
+                            size: 15.0,
+                          ),
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 40.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).error,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
                             ),
-                            options: FFButtonOptions(
-                              width: double.infinity,
-                              height: 40.0,
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 0.0, 24.0, 0.0),
-                              iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).primary,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                  ),
-                              elevation: 3.0,
-                              borderSide: BorderSide(
-                                color: Colors.transparent,
-                                width: 1.0,
-                              ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
                         ),
-                    ],
+                      ),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

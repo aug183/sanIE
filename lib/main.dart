@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = pickingSystemFirebaseUserStream()
+    userStream = sanIEFirebaseUserStream()
       ..listen((user) => _appStateNotifier.update(user));
     jwtTokenStream.listen((_) {});
     Future.delayed(
@@ -87,7 +87,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Picking-System',
+      title: 'sanIE',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -137,6 +137,8 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'HomePage': HomePageWidget(),
       'Orders': OrdersWidget(),
+      'historyPage': HistoryPageWidget(),
+      'productsPage': ProductsPageWidget(),
       'Settings': SettingsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -156,9 +158,9 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
-        backgroundColor: Colors.white,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         selectedItemColor: FlutterFlowTheme.of(context).primary,
-        unselectedItemColor: Color(0x8A000000),
+        unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
         selectedBackgroundColor: Color(0x00000000),
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
@@ -175,14 +177,17 @@ class _NavBarPageState extends State<NavBarPage> {
                   currentIndex == 0 ? Icons.home : Icons.home_outlined,
                   color: currentIndex == 0
                       ? FlutterFlowTheme.of(context).primary
-                      : Color(0x8A000000),
+                      : FlutterFlowTheme.of(context).primaryText,
                   size: currentIndex == 0 ? 24.0 : 24.0,
                 ),
                 Text(
                   'Home',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: FlutterFlowTheme.of(context).secondaryText,
+                    color: currentIndex == 0
+                        ? FlutterFlowTheme.of(context).primary
+                        : FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 11.0,
                   ),
                 ),
               ],
@@ -193,19 +198,20 @@ class _NavBarPageState extends State<NavBarPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  currentIndex == 1
-                      ? Icons.shopping_bag
-                      : Icons.shopping_bag_outlined,
+                  Icons.shopping_cart_rounded,
                   color: currentIndex == 1
                       ? FlutterFlowTheme.of(context).primary
-                      : Color(0x8A000000),
-                  size: currentIndex == 1 ? 24.0 : 24.0,
+                      : FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
                 ),
                 Text(
                   'Orders',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: FlutterFlowTheme.of(context).secondaryText,
+                    color: currentIndex == 1
+                        ? FlutterFlowTheme.of(context).primary
+                        : FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 11.0,
                   ),
                 ),
               ],
@@ -216,19 +222,67 @@ class _NavBarPageState extends State<NavBarPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  currentIndex == 2 ? Icons.settings : Icons.settings_outlined,
+                  currentIndex == 2 ? Icons.history : Icons.history_outlined,
                   color: currentIndex == 2
                       ? FlutterFlowTheme.of(context).primary
-                      : Color(0x8A000000),
+                      : FlutterFlowTheme.of(context).primaryText,
                   size: currentIndex == 2 ? 24.0 : 24.0,
                 ),
                 Text(
-                  'Settings',
+                  'History',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: currentIndex == 2
                         ? FlutterFlowTheme.of(context).primary
-                        : Color(0x8A000000),
+                        : FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_bag_rounded,
+                  color: currentIndex == 3
+                      ? FlutterFlowTheme.of(context).primary
+                      : FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+                Text(
+                  'Items',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 3
+                        ? FlutterFlowTheme.of(context).primary
+                        : FlutterFlowTheme.of(context).primaryText,
+                    fontSize: 11.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          FloatingNavbarItem(
+            customWidget: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  currentIndex == 4 ? Icons.settings : Icons.settings_outlined,
+                  color: currentIndex == 4
+                      ? FlutterFlowTheme.of(context).primary
+                      : FlutterFlowTheme.of(context).primaryText,
+                  size: currentIndex == 4 ? 24.0 : 24.0,
+                ),
+                Text(
+                  'Setting',
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: currentIndex == 4
+                        ? FlutterFlowTheme.of(context).primary
+                        : FlutterFlowTheme.of(context).primaryText,
                     fontSize: 11.0,
                   ),
                 ),

@@ -26,11 +26,6 @@ class UsersRecord extends FirestoreRecord {
   String get displayName => _displayName ?? '';
   bool hasDisplayName() => _displayName != null;
 
-  // "uid" field.
-  String? _uid;
-  String get uid => _uid ?? '';
-  bool hasUid() => _uid != null;
-
   // "created_time" field.
   DateTime? _createdTime;
   DateTime? get createdTime => _createdTime;
@@ -51,14 +46,25 @@ class UsersRecord extends FirestoreRecord {
   String get photoUrl => _photoUrl ?? '';
   bool hasPhotoUrl() => _photoUrl != null;
 
+  // "manager" field.
+  bool? _manager;
+  bool get manager => _manager ?? false;
+  bool hasManager() => _manager != null;
+
+  // "uid" field.
+  String? _uid;
+  String get uid => _uid ?? '';
+  bool hasUid() => _uid != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
-    _uid = snapshotData['uid'] as String?;
     _createdTime = snapshotData['created_time'] as DateTime?;
     _phoneNumber = snapshotData['phone_number'] as String?;
     _admin = snapshotData['admin'] as bool?;
     _photoUrl = snapshotData['photo_url'] as String?;
+    _manager = snapshotData['manager'] as bool?;
+    _uid = snapshotData['uid'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -97,21 +103,23 @@ class UsersRecord extends FirestoreRecord {
 Map<String, dynamic> createUsersRecordData({
   String? email,
   String? displayName,
-  String? uid,
   DateTime? createdTime,
   String? phoneNumber,
   bool? admin,
   String? photoUrl,
+  bool? manager,
+  String? uid,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
       'email': email,
       'display_name': displayName,
-      'uid': uid,
       'created_time': createdTime,
       'phone_number': phoneNumber,
       'admin': admin,
       'photo_url': photoUrl,
+      'manager': manager,
+      'uid': uid,
     }.withoutNulls,
   );
 
@@ -125,22 +133,24 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
   bool equals(UsersRecord? e1, UsersRecord? e2) {
     return e1?.email == e2?.email &&
         e1?.displayName == e2?.displayName &&
-        e1?.uid == e2?.uid &&
         e1?.createdTime == e2?.createdTime &&
         e1?.phoneNumber == e2?.phoneNumber &&
         e1?.admin == e2?.admin &&
-        e1?.photoUrl == e2?.photoUrl;
+        e1?.photoUrl == e2?.photoUrl &&
+        e1?.manager == e2?.manager &&
+        e1?.uid == e2?.uid;
   }
 
   @override
   int hash(UsersRecord? e) => const ListEquality().hash([
         e?.email,
         e?.displayName,
-        e?.uid,
         e?.createdTime,
         e?.phoneNumber,
         e?.admin,
-        e?.photoUrl
+        e?.photoUrl,
+        e?.manager,
+        e?.uid
       ]);
 
   @override

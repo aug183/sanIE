@@ -38,3 +38,15 @@ String progressText(List<ItemTypeStruct> inputType) {
   output = output + "%";
   return output;
 }
+
+bool checkIfProductInCart(
+  List<ItemTypeStruct> cartList,
+  String barCode,
+) {
+  for (var item in cartList) {
+    if (item.barcode == barCode) {
+      return true;
+    }
+  }
+  return false;
+}
