@@ -124,6 +124,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 'orderRef', ParamType.DocumentReference, false, ['orders']),
             orderID: params.getParam('orderID', ParamType.String),
             isCancelled: params.getParam('isCancelled', ParamType.bool),
+            isPicked: params.getParam('isPicked', ParamType.bool),
           ),
         ),
         FFRoute(
@@ -204,6 +205,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/addProductsPage',
           requireAuth: true,
           builder: (context, params) => AddProductsPageWidget(),
+        ),
+        FFRoute(
+          name: 'assignOrders',
+          path: '/assignOrders',
+          requireAuth: true,
+          asyncParams: {
+            'userList': getDocList(['users'], UsersRecord.fromSnapshot),
+          },
+          builder: (context, params) => AssignOrdersWidget(
+            userList: params.getParam<UsersRecord>(
+                'userList', ParamType.Document, true),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

@@ -178,6 +178,10 @@ class _HistoryPageWidgetState extends State<HistoryPageWidget> {
                                     historyViewItem.cancelled,
                                     ParamType.bool,
                                   ),
+                                  'isPicked': serializeParam(
+                                    historyViewItem.picked,
+                                    ParamType.bool,
+                                  ),
                                 }.withoutNulls,
                               );
 

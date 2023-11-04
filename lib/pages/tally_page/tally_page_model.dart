@@ -9,6 +9,7 @@ import '/flutter_flow/custom_functions.dart' as functions;
 import 'tally_page_widget.dart' show TallyPageWidget;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -32,6 +33,12 @@ class TallyPageModel extends FlutterFlowModel<TallyPageWidget> {
   int? documentNumber;
   AudioPlayer? soundPlayer1;
   AudioPlayer? soundPlayer2;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  OrdersRecord? orderDetails;
+  // Stores action output result for [Firestore Query - Query a collection] action in Button widget.
+  List<ItemsRecord>? itemList;
+  // Stores action output result for [Backend Call - Read Document] action in Button widget.
+  UsersRecord? picker;
 
   /// Initialization and disposal methods.
 

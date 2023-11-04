@@ -256,7 +256,7 @@ class _ItemConfirmationWidgetState extends State<ItemConfirmationWidget> {
                     },
                     text: 'Scan Order Code',
                     icon: Icon(
-                      Icons.camera_alt,
+                      Icons.qr_code_rounded,
                       size: 15.0,
                     ),
                     options: FFButtonOptions(
