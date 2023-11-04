@@ -7,3 +7,5 @@ export 'check_if_scanned_order_is_correct.dart'
     show checkIfScannedOrderIsCorrect;
 export 'change_password.dart' show changePassword;
 export 'create_order.dart' show createOrder;
+export 'string_to_doc_ref.dart' show stringToDocRef;
+export 'pdf_invoice.dart' show pdfInvoice;

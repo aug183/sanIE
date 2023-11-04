@@ -333,74 +333,92 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              var confirmDialogResponse =
-                                  await showDialog<bool>(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return AlertDialog(
-                                            title: Text('Track Order:'),
-                                            content: Text(
-                                                noSearchListviewItem.orderId),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext, false),
-                                                child: Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext, true),
-                                                child: Text('Confirm'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ) ??
-                                      false;
-                              if (confirmDialogResponse) {
-                                _model.itemQuery = await queryItemsRecordOnce(
-                                  parent: noSearchListviewItem.reference,
-                                  queryBuilder: (itemsRecord) =>
-                                      itemsRecord.orderBy('quantity'),
-                                );
-                                _model.dataTypeContent =
-                                    await actions.documenToDataType(
-                                  _model.itemQuery!.toList(),
-                                );
-                                setState(() {
-                                  FFAppState().itemAppState = _model
-                                      .dataTypeContent!
-                                      .toList()
-                                      .cast<ItemTypeStruct>();
-                                });
+                              var _shouldSetState = false;
+                              if (!valueOrDefault<bool>(
+                                  currentUserDocument?.admin, false)) {
+                                var confirmDialogResponse =
+                                    await showDialog<bool>(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Track Order:'),
+                                              content: Text(
+                                                  noSearchListviewItem.orderId),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext,
+                                                          false),
+                                                  child: Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext,
+                                                          true),
+                                                  child: Text('Confirm'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ) ??
+                                        false;
+                                if (!confirmDialogResponse) {
+                                  if (_shouldSetState) setState(() {});
+                                  return;
+                                }
+                              } else if (valueOrDefault<bool>(
+                                  currentUserDocument?.manager, false)) {}
 
-                                context.pushNamed(
-                                  'TallyPage',
-                                  queryParameters: {
-                                    'orderRef': serializeParam(
-                                      noSearchListviewItem.reference,
-                                      ParamType.DocumentReference,
-                                    ),
-                                    'orderID': serializeParam(
-                                      noSearchListviewItem.orderId,
-                                      ParamType.String,
-                                    ),
-                                    'isCancelled': serializeParam(
-                                      noSearchListviewItem.cancelled,
-                                      ParamType.bool,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.scale,
-                                      alignment: Alignment.bottomCenter,
-                                    ),
-                                  },
-                                );
-                              }
+                              _model.itemQuery = await queryItemsRecordOnce(
+                                parent: noSearchListviewItem.reference,
+                                queryBuilder: (itemsRecord) =>
+                                    itemsRecord.orderBy('quantity'),
+                              );
+                              _shouldSetState = true;
+                              _model.dataTypeContent =
+                                  await actions.documenToDataType(
+                                _model.itemQuery!.toList(),
+                              );
+                              _shouldSetState = true;
+                              setState(() {
+                                FFAppState().itemAppState = _model
+                                    .dataTypeContent!
+                                    .toList()
+                                    .cast<ItemTypeStruct>();
+                              });
 
-                              setState(() {});
+                              context.pushNamed(
+                                'TallyPage',
+                                queryParameters: {
+                                  'orderRef': serializeParam(
+                                    noSearchListviewItem.reference,
+                                    ParamType.DocumentReference,
+                                  ),
+                                  'orderID': serializeParam(
+                                    noSearchListviewItem.orderId,
+                                    ParamType.String,
+                                  ),
+                                  'isCancelled': serializeParam(
+                                    noSearchListviewItem.cancelled,
+                                    ParamType.bool,
+                                  ),
+                                  'isPicked': serializeParam(
+                                    noSearchListviewItem.picked,
+                                    ParamType.bool,
+                                  ),
+                                }.withoutNulls,
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.scale,
+                                    alignment: Alignment.bottomCenter,
+                                  ),
+                                },
+                              );
+
+                              if (_shouldSetState) setState(() {});
                             },
                             child: Container(
                               width: double.infinity,
@@ -742,74 +760,88 @@ class _OrdersWidgetState extends State<OrdersWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              var confirmDialogResponse =
-                                  await showDialog<bool>(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return AlertDialog(
-                                            title: Text('Track Order:'),
-                                            content: Text(
-                                                searchListviewItem.orderId),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext, false),
-                                                child: Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext, true),
-                                                child: Text('Confirm'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      ) ??
-                                      false;
-                              if (confirmDialogResponse) {
-                                _model.itemQuery1 = await queryItemsRecordOnce(
-                                  parent: searchListviewItem.reference,
-                                  queryBuilder: (itemsRecord) =>
-                                      itemsRecord.orderBy('quantity'),
-                                );
-                                _model.dataTypeContent1 =
-                                    await actions.documenToDataType(
-                                  _model.itemQuery1!.toList(),
-                                );
-                                setState(() {
-                                  FFAppState().itemAppState = _model
-                                      .dataTypeContent1!
-                                      .toList()
-                                      .cast<ItemTypeStruct>();
-                                });
+                              var _shouldSetState = false;
+                              if (!valueOrDefault<bool>(
+                                  currentUserDocument?.admin, false)) {
+                                var confirmDialogResponse = await showDialog<
+                                        bool>(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: Text('Track Order:'),
+                                          content:
+                                              Text(searchListviewItem.orderId),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext, false),
+                                              child: Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext, true),
+                                              child: Text('Confirm'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ) ??
+                                    false;
+                                if (!confirmDialogResponse) {
+                                  if (_shouldSetState) setState(() {});
+                                  return;
+                                }
+                              } else if (valueOrDefault<bool>(
+                                  currentUserDocument?.manager, false)) {}
 
-                                context.pushNamed(
-                                  'TallyPage',
-                                  queryParameters: {
-                                    'orderRef': serializeParam(
-                                      searchListviewItem.reference,
-                                      ParamType.DocumentReference,
-                                    ),
-                                    'orderID': serializeParam(
-                                      searchListviewItem.orderId,
-                                      ParamType.String,
-                                    ),
-                                    'isCancelled': serializeParam(
-                                      searchListviewItem.cancelled,
-                                      ParamType.bool,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.scale,
-                                      alignment: Alignment.bottomCenter,
-                                    ),
-                                  },
-                                );
-                              }
+                              _model.itemQuery1 = await queryItemsRecordOnce(
+                                parent: searchListviewItem.reference,
+                                queryBuilder: (itemsRecord) =>
+                                    itemsRecord.orderBy('quantity'),
+                              );
+                              _shouldSetState = true;
+                              _model.dataTypeContent1 =
+                                  await actions.documenToDataType(
+                                _model.itemQuery1!.toList(),
+                              );
+                              _shouldSetState = true;
+                              setState(() {
+                                FFAppState().itemAppState = _model
+                                    .dataTypeContent1!
+                                    .toList()
+                                    .cast<ItemTypeStruct>();
+                              });
 
-                              setState(() {});
+                              context.pushNamed(
+                                'TallyPage',
+                                queryParameters: {
+                                  'orderRef': serializeParam(
+                                    searchListviewItem.reference,
+                                    ParamType.DocumentReference,
+                                  ),
+                                  'orderID': serializeParam(
+                                    searchListviewItem.orderId,
+                                    ParamType.String,
+                                  ),
+                                  'isCancelled': serializeParam(
+                                    searchListviewItem.cancelled,
+                                    ParamType.bool,
+                                  ),
+                                  'isPicked': serializeParam(
+                                    searchListviewItem.picked,
+                                    ParamType.bool,
+                                  ),
+                                }.withoutNulls,
+                                extra: <String, dynamic>{
+                                  kTransitionInfoKey: TransitionInfo(
+                                    hasTransition: true,
+                                    transitionType: PageTransitionType.scale,
+                                    alignment: Alignment.bottomCenter,
+                                  ),
+                                },
+                              );
+
+                              if (_shouldSetState) setState(() {});
                             },
                             child: Container(
                               width: double.infinity,

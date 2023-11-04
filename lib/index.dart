@@ -17,3 +17,4 @@ export '/pages/create_account/create_account_widget.dart'
 export '/pages/products_page/products_page_widget.dart' show ProductsPageWidget;
 export '/pages/add_products_page/add_products_page_widget.dart'
     show AddProductsPageWidget;
+export '/pages/assign_orders/assign_orders_widget.dart' show AssignOrdersWidget;

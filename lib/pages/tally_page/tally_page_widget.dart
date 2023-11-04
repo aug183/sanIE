@@ -8,6 +8,7 @@ import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -24,11 +25,13 @@ class TallyPageWidget extends StatefulWidget {
     required this.orderRef,
     required this.orderID,
     required this.isCancelled,
+    required this.isPicked,
   }) : super(key: key);
 
   final DocumentReference? orderRef;
   final String? orderID;
   final bool? isCancelled;
+  final bool? isPicked;
 
   @override
   _TallyPageWidgetState createState() => _TallyPageWidgetState();
@@ -89,32 +92,41 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    var confirmDialogResponse = await showDialog<bool>(
-                          context: context,
-                          builder: (alertDialogContext) {
-                            return AlertDialog(
-                              title: Text('Notice'),
-                              content: Text('Cancel order tracking?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(alertDialogContext, false),
-                                  child: Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(alertDialogContext, true),
-                                  child: Text('Confirm'),
-                                ),
-                              ],
-                            );
-                          },
-                        ) ??
-                        false;
-                    if (confirmDialogResponse) {
-                      FFAppState().itemAppState = [];
-                      context.safePop();
+                    if (!((valueOrDefault<bool>(
+                                currentUserDocument?.admin, false) ==
+                            true) ||
+                        (valueOrDefault<bool>(
+                                currentUserDocument?.manager, false) ==
+                            true) ||
+                        (widget.isPicked == true))) {
+                      var confirmDialogResponse = await showDialog<bool>(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                title: Text('Notice'),
+                                content: Text('Cancel order tracking?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(
+                                        alertDialogContext, false),
+                                    child: Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext, true),
+                                    child: Text('Confirm'),
+                                  ),
+                                ],
+                              );
+                            },
+                          ) ??
+                          false;
+                      if (!confirmDialogResponse) {
+                        return;
+                      }
                     }
+                    FFAppState().itemAppState = [];
+                    context.safePop();
                   },
                   child: Text(
                     'Cancel',
@@ -282,7 +294,7 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                     (valueOrDefault<bool>(
                             currentUserDocument?.manager, false) ==
                         false) &&
-                    (widget.isCancelled == false))
+                    (widget.isPicked == false))
                   AuthUserStreamWidget(
                     builder: (context) => Container(
                       width: double.infinity,
@@ -446,7 +458,7 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                                 },
                                 text: 'Scan item barcode',
                                 icon: Icon(
-                                  Icons.camera_alt,
+                                  Icons.qr_code_rounded,
                                   size: 15.0,
                                 ),
                                 options: FFButtonOptions(
@@ -540,7 +552,7 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                   ),
                 if ((valueOrDefault<bool>(currentUserDocument?.admin, false) ==
                         true) &&
-                    (widget.isCancelled == false))
+                    (widget.isPicked == false))
                   AuthUserStreamWidget(
                     builder: (context) => Container(
                       width: double.infinity,
@@ -613,6 +625,69 @@ class _TallyPageWidgetState extends State<TallyPageWidget> {
                             iconPadding: EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 0.0),
                             color: FlutterFlowTheme.of(context).error,
+                            textStyle: FlutterFlowTheme.of(context)
+                                .titleSmall
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                ),
+                            elevation: 3.0,
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 1.0,
+                            ),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if ((valueOrDefault<bool>(currentUserDocument?.admin, false) ==
+                        true) &&
+                    (widget.isPicked == true) &&
+                    (widget.isCancelled == false))
+                  AuthUserStreamWidget(
+                    builder: (context) => Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            12.0, 12.0, 12.0, 12.0),
+                        child: FFButtonWidget(
+                          onPressed: () async {
+                            _model.orderDetails =
+                                await OrdersRecord.getDocumentOnce(
+                                    widget.orderRef!);
+                            _model.itemList = await queryItemsRecordOnce(
+                              parent: widget.orderRef,
+                            );
+                            _model.picker = await UsersRecord.getDocumentOnce(
+                                _model.orderDetails!.operator!);
+                            await actions.pdfInvoice(
+                              _model.orderDetails!,
+                              _model.itemList!.toList(),
+                              _model.picker!.displayName,
+                              getCurrentTimestamp,
+                            );
+
+                            setState(() {});
+                          },
+                          text: 'Generate Report',
+                          icon: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            size: 15.0,
+                          ),
+                          options: FFButtonOptions(
+                            width: double.infinity,
+                            height: 40.0,
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 0.0, 24.0, 0.0),
+                            iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 0.0, 0.0),
+                            color: FlutterFlowTheme.of(context).primary,
                             textStyle: FlutterFlowTheme.of(context)
                                 .titleSmall
                                 .override(
